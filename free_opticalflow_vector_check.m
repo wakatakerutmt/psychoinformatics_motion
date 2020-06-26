@@ -20,7 +20,7 @@ step=4;
 % （例えば[1,1]とするとx座標とy座標1ピクセル毎にベクトルを表示するので大変重い。
 %  指定する位置は1pxなので、このままでは重く使えないので、指定する位置を拡大させることにした。
 %  この拡大の幅をvectorRangeとする
-vectorSize = 5; 
+vectorSize = 10; 
 vectorRange = 5;
 level = [vectorRange+1 vectorRange+1];
 
@@ -31,7 +31,6 @@ level = [vectorRange+1 vectorRange+1];
 imgpath = strcat(trainDir,name,'/frame_0015.png');
 imshow(imgpath);
 [x,y] = getpts; % クリックした位置を取得
-close;
 stop_x_pixel = round(x(1));
 stop_y_pixel = round(y(1));
 
@@ -55,11 +54,11 @@ x_range = [x_point, to_x_point];
 y_range = [y_point, to_y_point];
 
 
-% オプティカルフローのベクトルを画像の上に表示するためのおまじない的なもの
-h = figure;
-movegui(h);
-hViewPanel = uipanel(h,'Position',[0 0 1 1],'Title','Plot of Optical Flow Vectors');
-hPlot = axes(hViewPanel);
+% % オプティカルフローのベクトルを画像の上に表示するためのおまじない的なもの
+% h = figure;
+% movegui(h);
+% hViewPanel = uipanel(h,'Position',[0 0 1 1],'Title','Plot of Optical Flow Vectors');
+% hPlot = axes(hViewPanel);
 
 % オプティカルフローのを画像に合成して表示
 count = 1;
@@ -156,7 +155,7 @@ for ii = 1:length(GTVectorNames)
         hold on
 %         plot(flow,'DecimationFactor',level,'ScaleFactor',vectorSize,'Parent',hPlot);
         hold off
-        pause(1)
+        pause(10^-1)
         
         count = count + 1;
         continue
@@ -237,15 +236,25 @@ movegui(h);
 hViewPanel = uipanel(h,'Position',[0 0 1 1],'Title','Plot of Optical Flow Vectors');
 hPlot = axes(hViewPanel);
 imshow(img)
+
+% テキストを挿入
 dim = [.2 .5 .3 .3];
 str = 'Straight Line Plot from 1 to 10';
 annotation('textbox',dim,'String',str,'FitBoxToText','on');
+
+
 hold on
+
+% GTのベクトル
 plot(flow,'DecimationFactor',[1 1],'ScaleFactor',vectorSize,'Parent',hPlot);
+
+% ベクトルの色を変更
 % Find quiver handle
 q = findobj(gca,'type','Quiver');
 % Change color to red
 q.Color = 'r';
+
+% ユーザのベクトル
 plot(flow2,'DecimationFactor',[1 1],'ScaleFactor',vectorSize,'Parent',hPlot);
 
 hold off
